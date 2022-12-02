@@ -12,20 +12,41 @@ def json_main(request):
     except:
         username = "user"
 
-    return render(request,'index.html',{"user_name":username})
+    log = ""
+
+    if logedin(request):
+        log = "Logout"
+        print("lol logout")
+
+    return render(request,'index.html',{"user_name":username,"logedin":log})
 
 
+def profile(request):
+
+    if logedin(request):
+        template = loader.get_template('profile.html')
+        return HttpResponse(template.render())
+    else:
+        return redirect("../login")
+
+# --------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
 
 def login(request):
     template = loader.get_template('login.html')
-    return HttpResponse(template.render())
+    return render(request,'login.html',{"error":""})
 
+# --------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
 
 
 def signup(request):
 
     template = loader.get_template('sign_up.html')
     return HttpResponse(template.render())
+
+# --------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
 
 
 def login_val(request):
@@ -36,13 +57,20 @@ def login_val(request):
         password = request.GET['password']
 
         l = UserModel.objects.raw("SELECT * FROM json_main_usermodel WHERE user_email = '{}' AND user_password = '{}'".format(email,password))
-
         # print(l[0].user_name)
-        request.session['user_name'] = l[0].user_name
-        request.session['user_email'] = l[0].user_email
+
+        try:
+            request.session['user_name'] = l[0].user_name
+            request.session['user_email'] = l[0].user_email
+        except:
+            print("lol login")
+            # return redirect("../login",{"error":"USER DOESN'T EXIST"})
+            return render(request,'login.html',{"error":"USER DOESN'T EXIST"})
         
         return redirect("../")
         
+# --------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
 
 
 def sign_up_val(request):
@@ -65,7 +93,35 @@ def sign_up_val(request):
 
         return redirect("../")
     
+# --------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
 
-# def bool logedin():
+def logout(request) :
 
+    try:
+        request.session['user_name'] = None
+        request.session['user_email'] = None
+        del request.session['your key']
+    except:
+        print("ERROR")
+
+    return redirect("../login")
+
+
+# --------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
+
+def logedin(request):
+    
+    t = True
+
+    try:
+        if request.session['user_name'] != None :
+            t = True
+        else:
+            t = False
+    except:
+        t = False
+
+    return t
 
