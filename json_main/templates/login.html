@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+
+    
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>logn_page</title>
+    <link rel="stylesheet" href="{% static '/assets/css/bootstrap.min.css' %} ">
+    <link rel="stylesheet" href="{% static 'assets/css/Login-Form-Basic-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/Ludens-basic-login.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/VentasPro-Login.css' %}">
+</head>
+
+<body>
+    <!-- Start: Ludens basic login -->
+    <div class="d-flex d-xl-flex align-items-center align-items-xl-center vh-100" style="width: 100%;height: 100%;">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-9 col-lg-12 col-xl-10">
+                    <div class="card shadow-lg o-hidden border-0 my-5">
+                        <div class="card-body p-0">
+                            <div class="row">
+                                <div class="col-lg-6 d-none d-lg-flex">
+                                    <div class="flex-grow-1 bg-login-image" style="background-image: url(&quot;/img/durvill_logo.jpg&quot;);"></div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="p-5">
+                                        <div class="text-center">
+                                            <h4 class="text-dark mb-4">Welcome back!</h4>
+                                        </div>
+                                        <form class="user" action="../login_val/" method="get">
+                                            <div class="mb-3"><input class="form-control form-control-user" type="email" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="  Email" name="email"></div>
+                                            <div class="mb-3"><input class="form-control form-control-user" type="password" id="exampleInputPassword" placeholder="Password" name="password"></div>
+                                            <div class="mb-3">
+                                                <div class="custom-control custom-checkbox small"></div>
+                                            </div><button class="btn btn-primary d-block btn-user w-100" type="submit">Login</button>
+                                            <hr>
+                                            <hr>
+                                        </form>
+                                        <div class="text-center"><a class="small" href="forgot-password.html">Forgot Password?</a></div>
+                                        <div class="text-center"><a class="small" href="../signup">Already have an account ?</a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- End: Ludens basic login -->
+    <script src="{% static '/assets/css/bootstrap.min.js' %}"></script>
+</body>
+
+</html>
