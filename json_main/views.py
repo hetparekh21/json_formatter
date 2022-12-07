@@ -63,8 +63,7 @@ def login_val(request):
         try:
             request.session['user_name'] = obj.user_name
             request.session['user_email'] = obj.user_email
-            # request.session['user_id'] = str (obj.user_id)
-            print(obj.tojson())
+            request.session['user_id'] = obj.pk
         except :
             print("lol login")
             # return redirect("../login",{"error":"USER DOESN'T EXIST"})
@@ -96,7 +95,8 @@ def sign_up_val(request):
         # l = UserModel.objects.raw("SELECT id FROM json_main_usermodel WHERE user_email = '{}'".format(email))
         obj = UserModel.objects.filter(user_email = email).get()
 
-        request.session['user_id'] = obj.user_id
+
+        request.session['user_id'] = obj.pk
         request.session['user_name'] = name
         request.session['user_email'] = email
 
@@ -140,12 +140,18 @@ def logedin(request):
 
 def save_fun(user_id,json_str):
 
-    # l = saved_jsons.objects.raw("INSERT INTO json_main_saved_jsons (user_id,saved_json) VALUES ({},{})".format(user_id,json_str))
-    obj = saved_jsons()
-    obj.user_id = user_id 
-    obj.saved_json = json_str
+    # print("INSERT INTO json_main_saved_jsons (user_id,saved_json) VALUES ({},'{}')".format(user_id,json_str))
+    # l = saved_jsons.objects.raw("INSERT INTO json_main_saved_jsons(user_id,saved_json) VALUES ({},'{}')".format(user_id,json_str))
+    # print(user_id)
 
-    obj.save()
+    obj_user = UserModel.objects.filter(id = user_id).get()
+    obj_user.saved_jsons_set.create(saved_json = json_str)
+
+    # obj = saved_jsons()
+    # obj.user_id = obj_user.user_id
+    # obj.saved_json = json_str
+
+    # obj.save()
 
 
 # --------------------------------------------------------------------------------------------------
