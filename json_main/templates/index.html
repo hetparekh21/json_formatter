@@ -29,13 +29,12 @@
                 <div class="d-flex flex-row">
                     <div style="margin:10px;"><button class="btn btn-primary" type="button" onclick="copy_data()" >Copy</button></div>
                     <div style="margin:10px;"><button class="btn btn-primary" type="button" onclick="clear_formatted()" >Clear</button></div>
-                    <div style="margin:10px;"><form action="../save/" method="GET"><button class="btn btn-primary" type="submit" >Save</button></form></div>
-                </div>
+                    <div style="margin:10px;"><form action="../save/" method="POST">{% csrf_token %}<button class="btn btn-primary" type="submit" >Save</button></div></div>
                 <div class="MessageBox">
                     <div class="col-xl-9">
                         <h4>Formatted JSON</h4>
                     </div>
-                    <textarea placeholder="" id="formatted" readonly ></textarea>
+                    <textarea placeholder="" id="formatted" name="formatted" readonly ></textarea></form>
                 </div>
             </div>
 

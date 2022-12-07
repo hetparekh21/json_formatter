@@ -2,24 +2,26 @@ from django.template import loader
 from django.http import HttpResponse
 from django.shortcuts import render,redirect
 
-from json_main.models import UserModel
+from json_main.models import UserModel, saved_jsons
 
 def json_main(request):
 
     try:
         username = request.session['user_name']
-        
+        user_id = request.session['user_id']
     except:
         username = "user"
-
+        user_id = None
+        
     log = ""
 
     if logedin(request):
         log = "Logout"
-        print("lol logout")
 
-    return render(request,'index.html',{"user_name":username,"logedin":log})
+    return render(request,'index.html',{"user_id":user_id,"user_name":username,"logedin":log})
 
+# --------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
 
 def profile(request):
 
@@ -41,33 +43,35 @@ def login(request):
 
 
 def signup(request):
-
-    template = loader.get_template('sign_up.html')
-    return HttpResponse(template.render())
-
+    return render(request,'sign_up.html')
 # --------------------------------------------------------------------------------------------------
 # --------------------------------------------------------------------------------------------------
 
 
 def login_val(request):
 
-    if(request.method == 'GET'):
+    if(request.method == 'POST'):
 
-        email = request.GET['email']
-        password = request.GET['password']
+        email = request.POST['email']
+        password = request.POST['password']
 
-        l = UserModel.objects.raw("SELECT * FROM json_main_usermodel WHERE user_email = '{}' AND user_password = '{}'".format(email,password))
+        # l = UserModel.objects.raw("SELECT * FROM json_main_usermodel WHERE user_email = '{}' AND user_password = '{}'".format(email,password))
         # print(l[0].user_name)
 
+        obj = UserModel.objects.filter(user_email = email , user_password = password).get()
+
         try:
-            request.session['user_name'] = l[0].user_name
-            request.session['user_email'] = l[0].user_email
-        except:
+            request.session['user_name'] = obj.user_name
+            request.session['user_email'] = obj.user_email
+            # request.session['user_id'] = str (obj.user_id)
+            print(obj.tojson())
+        except :
             print("lol login")
             # return redirect("../login",{"error":"USER DOESN'T EXIST"})
             return render(request,'login.html',{"error":"USER DOESN'T EXIST"})
         
-        return redirect("../")
+        return json_main(request)
+        # return redirect("../")
         
 # --------------------------------------------------------------------------------------------------
 # --------------------------------------------------------------------------------------------------
@@ -75,10 +79,10 @@ def login_val(request):
 
 def sign_up_val(request):
 
-    if(request.method == 'GET'):
-        name = request.GET['name']
-        email = request.GET['email']
-        password = request.GET['password']
+    if(request.method == 'POST'):
+        name = request.POST['name']
+        email = request.POST['email']
+        password = request.POST['password']
 
         # obj = UserModel(user_name = name , user_email = email , user_password = password)
         # obj = UserModel(name,email,password)
@@ -88,6 +92,11 @@ def sign_up_val(request):
         obj.user_password = password 
 
         obj.save()
+
+        # l = UserModel.objects.raw("SELECT id FROM json_main_usermodel WHERE user_email = '{}'".format(email))
+        obj = UserModel.objects.filter(user_email = email).get()
+
+        request.session['user_id'] = obj.user_id
         request.session['user_name'] = name
         request.session['user_email'] = email
 
@@ -101,6 +110,7 @@ def logout(request) :
     try:
         request.session['user_name'] = None
         request.session['user_email'] = None
+        request.session['user_id'] = None
         del request.session['your key']
     except:
         print("ERROR")
@@ -111,7 +121,7 @@ def logout(request) :
 # --------------------------------------------------------------------------------------------------
 # --------------------------------------------------------------------------------------------------
 
-def logedin(request):
+def logedin(request): 
     
     t = True
 
@@ -125,3 +135,28 @@ def logedin(request):
 
     return t
 
+# --------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
+
+def save_fun(user_id,json_str):
+
+    # l = saved_jsons.objects.raw("INSERT INTO json_main_saved_jsons (user_id,saved_json) VALUES ({},{})".format(user_id,json_str))
+    obj = saved_jsons()
+    obj.user_id = user_id 
+    obj.saved_json = json_str
+
+    obj.save()
+
+
+# --------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
+
+def save(request):
+
+    if logedin(request):
+        json_str = request.POST['formatted']
+        user_id = request.session['user_id']
+        save_fun(user_id,json_str)
+        return redirect("../")
+    else :
+        return redirect("../login")
