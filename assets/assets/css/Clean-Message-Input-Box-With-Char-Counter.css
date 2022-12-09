@@ -1,6 +1,5 @@
 .MessageBox {
-  width: 550px;
-  padding: 40px;
+  padding: 30px;
   background: #d3edff;
   display: flex;
   flex-direction: column;

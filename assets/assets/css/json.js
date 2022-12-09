@@ -18,15 +18,13 @@ function json_format() {
 
 function clear_data(){
     document.getElementById("data").value = "";
+    
 }
 
 function clear_formatted(){
     document.getElementById("formatted").value = "";
 }
 
-function copy_data(){
-    navigator.clipboard.writeText(document.getElementById("formatted").value);
-}
 
 function example(){
 

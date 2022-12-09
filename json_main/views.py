@@ -27,7 +27,10 @@ def profile(request):
 
     if logedin(request):
         template = loader.get_template('profile.html')
-        return HttpResponse(template.render())
+        # data = saved_jsons.objects.filter(id = request.session['user_id']).get()
+        data = saved_jsons.objects.raw(" SELECT * FROM json_main_saved_jsons WHERE user_id = {}".format(request.session['user_id']))
+        print(len(data))
+        return render(request,'profile.html',{"data":data})
     else:
         return redirect("../login")
 
@@ -164,5 +167,24 @@ def save(request):
         user_id = request.session['user_id']
         save_fun(user_id,json_str)
         return redirect("../")
+    else :
+        return redirect("../login")
+
+# --------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
+
+def delete_fun(id):
+
+    obj_user = saved_jsons.objects.filter(id = id).get()
+    obj_user.delete()
+
+# --------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
+
+def delete(request,id):
+
+    if logedin(request):
+        delete_fun(id)
+        return redirect("../profile")
     else :
         return redirect("../login")
