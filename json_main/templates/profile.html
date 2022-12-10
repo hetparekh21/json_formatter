@@ -16,14 +16,11 @@
         color: #fff;
     }
 </style>
-<!-- Start: 1 Row 1 Column -->
-<div style="height: 100%;">
     <div class="container mt-5">
 
-        {% for i in data %}
-        <div class="Row">
-
-            <div class="col-xl-5">
+        <div class="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
+            {% for i in data %}
+            <div class="col-xl-6">
                 <div class="d-flex flex-row">
                     <div style="margin:10px;"><button class="btn btn-primary" type="button" onclick="copy_data(this.id)"
                             id="{{i.id}}">Copy</button>
@@ -37,24 +34,10 @@
                     <textarea id="t_{{i.id}}" readonly>{{ i.saved_json }}</textarea></form>
                 </div>
             </div>
-            <!-- <div class="col-xl-5">
-                <div class="d-flex flex-row">
-                    <div style="margin:10px;"><button class="btn btn-primary" type="button" onclick="copy_data(this.id)"
-                            id="{{i.id}}">Copy</button>
-                    </div>
-                    <div style="margin:10px;">
-                        <form action="../delete/{{i.id}}" method="POST" id="{{i.id}}">{% csrf_token %}<button
-                                class="btn btn-danger" type="submit">delete</button>
-                    </div>
-                </div>
-                <div class="MessageBox">
-                    <textarea id="t_{{i.id}}" readonly>{{ i.saved_json }}</textarea></form>
-                </div>
-            </div> -->
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div><!-- End: 1 Row 1 Column -->
-</div>
+
+    </div>
 
 <footer class="text-center bg-dark mt-5">
     <div class="container text-white py-4 py-lg-5">
