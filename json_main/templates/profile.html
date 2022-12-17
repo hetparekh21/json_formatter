@@ -16,28 +16,37 @@
         color: #fff;
     }
 </style>
-    <div class="container mt-5">
+<div class="container mt-5">
 
-        <div class="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
-            {% for i in data %}
-            <div class="col-xl-6">
-                <div class="d-flex flex-row">
-                    <div style="margin:10px;"><button class="btn btn-primary" type="button" onclick="copy_data(this.id)"
-                            id="{{i.id}}">Copy</button>
-                    </div>
-                    <div style="margin:10px;">
-                        <form action="../delete/{{i.id}}" method="POST" id="{{i.id}}">{% csrf_token %}<button
-                                class="btn btn-danger" type="submit">delete</button>
-                    </div>
+    <form method="post" action="../updatePassword">
+        {% csrf_token %}
+    <div class="input-group mb-3">
+        <input type="password" class="form-control" name="pass" placeholder="Enter password" aria-label="Recipient's username"
+            aria-describedby="button-addon2">
+        <button class="btn btn-primary" type="submit" id="button-addon2">Change Password</button>
+    </div>
+</form>
+
+    <div class="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
+        {% for i in data %}
+        <div class="col-xl-6">
+            <div class="d-flex flex-row">
+                <div style="margin:10px;"><button class="btn btn-primary" type="button" onclick="copy_data(this.id)"
+                        id="{{i.id}}">Copy</button>
                 </div>
-                <div class="MessageBox">
-                    <textarea id="t_{{i.id}}" readonly>{{ i.saved_json }}</textarea></form>
+                <div style="margin:10px;">
+                    <form action="../delete/{{i.id}}" method="POST" id="{{i.id}}">{% csrf_token %}<button
+                            class="btn btn-danger" type="submit">delete</button>
                 </div>
             </div>
-            {% endfor %}
+            <div class="MessageBox">
+                <textarea id="t_{{i.id}}" readonly>{{ i.saved_json }}</textarea></form>
+            </div>
         </div>
-
+        {% endfor %}
     </div>
+
+</div>
 
 <footer class="text-center bg-dark mt-5">
     <div class="container text-white py-4 py-lg-5">

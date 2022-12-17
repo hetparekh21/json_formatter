@@ -188,3 +188,18 @@ def delete(request,id):
         return redirect("../profile")
     else :
         return redirect("../login")
+
+# --------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
+
+def updatePassword(request):
+    id = request.session['user_id']
+    new_password = request.POST['pass']
+
+    i = UserModel.objects.get(id = id)
+    i.user_password = new_password 
+    i.save()
+    return redirect('../')
+
+
+
